@@ -33,9 +33,10 @@
 # See --help output for more options.
 
 
-__version__ = '0.1'
+__version__ = '0.2'
 
 import os
+import os.path
 import errno
 import sys
 import time
@@ -105,8 +106,22 @@ def main():
         options.wait = int(options.wait)
 
     if options.verbose:
-        sys.stderr.write('lockfile: %s\n' % lockfile)
-        sys.stderr.write('cmd: %s\n' % cmd)
+        sys.stderr.write('lockfile: %r\n' % lockfile)
+        sys.stderr.write('cmd: %r\n' % cmd)
+
+    # check that symlink attacks in the lockfile directory are not possible
+    lockdir = os.path.dirname(os.path.realpath(lockfile)) or os.curdir
+    lockdir_mode = stat.S_IMODE(os.stat(lockdir).st_mode)
+    if options.verbose:
+        sys.stderr.write('lockdir: %r\n' % lockdir)
+        sys.stderr.write('lockdir mode: %s\n' % oct(lockdir_mode))
+    if (lockdir_mode & stat.S_IWGRP) or (lockdir_mode & stat.S_IWOTH):
+        sys.stderr.write('withlock: the destination directory for %r is %r, \n'
+                         '          which is writable by other users. That allows for symlink attacks. \n'
+                         '          Choose another directory.\n' \
+                                % (lockfile, lockdir))
+        sys.exit(3)
+
 
     prev_umask = os.umask(0066)
 
