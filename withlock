@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2009 Peter Poeml
+# Copyright 2009,2010 Peter Poeml
 # 
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 #
 #
 #
-# Parts of the locking strategy, and parts of the usage semantics, of this
-# script were inspired from with-lock-ex.c, which was written by Ian Jackson and
-# placed in the public domain by him.
+# withlock -- http://code.google.com/p/withlock/
 #
 #
 # A locking wrapper that make sure that a program isn't run more than once.
 # It creates locks that are valid only while the wrapper is running, and thus
 # will never require a cleanup, e.g. after a reboot.
+
+# Parts of the locking strategy, and parts of the usage semantics, of this
+# script were inspired from with-lock-ex.c, which was written by Ian Jackson and
+# placed in the public domain by him.
+#
 #
 # Usage is simple. Instead of your command 
 #   CMD ARGS...
