@@ -17,7 +17,7 @@
 #
 #
 # Parts of the locking strategy, and parts of the usage semantics, of this
-# script were inpired from with-lock-ex.c, which was written by Ian Jackson and
+# script were inspired from with-lock-ex.c, which was written by Ian Jackson and
 # placed in the public domain by him.
 #
 #
