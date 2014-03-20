@@ -49,6 +49,7 @@ import signal
 import atexit
 from optparse import OptionParser
 
+got_lock = False
 
 class SignalInterrupt(Exception):
     """Exception raised on SIGTERM and SIGHUP."""
@@ -64,10 +65,11 @@ for name in 'SIGBREAK', 'SIGHUP', 'SIGTERM':
 
 
 def cleanup(lockfile):
-    try:
-        os.unlink(lockfile)
-    except:
-        pass
+    if got_lock:
+        try:
+            os.unlink(lockfile)
+        except:
+            pass
 
 
 def main():
@@ -134,6 +136,7 @@ def main():
 
         try:
             fcntl.lockf(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            got_lock = True
             break
         except IOError, e:
             if e.errno in [ errno.EAGAIN, 
