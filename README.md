@@ -46,7 +46,7 @@ The most extensive testing has been performed on openSUSE with XFS and ext3 as u
 
 ## Download
 
-wget http://mirrorbrain.org/files/releases/withlock-0.3.tar.gz
+wget http://mirrorbrain.org/files/releases/withlock-0.4.tar.gz
 
 
 ## Simple install of the latest script from git master

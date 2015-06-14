@@ -36,7 +36,7 @@
 # See --help output for more options.
 
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 import os
 import os.path
