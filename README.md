@@ -136,6 +136,8 @@ Thanks!
 
 0.4, 2015:
 
+- fix lockfile cleanup (Thanks Martin Caj and Martin Vidner. Good Catch!)
+  (cosmetical bug which didn't affect the locking strategy)
 - man page added
 - license file added
 - moved to github.com

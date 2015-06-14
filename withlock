@@ -64,8 +64,12 @@ for name in 'SIGBREAK', 'SIGHUP', 'SIGTERM':
     if num: signal.signal(num, catchterm)
 
 
-def cleanup(lockfile):
+def cleanup(lockfile, verbose):
+    global got_lock
     if got_lock:
+        if verbose:
+            sys.stderr.write('removing lockfile: %r\n' % lockfile)
+
         try:
             os.unlink(lockfile)
         except:
@@ -132,6 +136,7 @@ def main():
 
     lock = open(lockfile, 'w')
 
+    global got_lock
     while 1 + 1 == 2:
 
         try:
@@ -174,7 +179,7 @@ def main():
                             % lockfile)
 
 
-    atexit.register(cleanup, lockfile)
+    atexit.register(cleanup, lockfile, options.verbose)
     os.umask(prev_umask)
 
     import subprocess
@@ -184,9 +189,6 @@ def main():
 
     if options.verbose:
         sys.stderr.write('command terminated with exit code %s\n' % rc)
-
-    if options.verbose:
-        sys.stderr.write('removing lockfile\n')
 
     sys.exit(rc)
 
