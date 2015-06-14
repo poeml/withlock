@@ -2,35 +2,41 @@
 
 ## About
 
-*withlock* is a locking wrapper script to make sure that some program isn't run more than once. It is ideal to prevent periodic jobs spawned by cron from stacking up.
+`withlock` is a locking wrapper script to make sure that some program isn't run
+more than once. It is ideal to prevent periodic jobs spawned by cron from
+stacking up.
 
-The locks created are valid only while the wrapper is running, and thus
-will _never_ require additional cleanup, even after a reboot. This makes the wrapper safe 
-and easy to use, and much better than implementing half-hearted locking 
+The locks created are valid only while the wrapper is running, and thus will
+*never* require additional cleanup, even after a reboot. This makes the wrapper
+safe and easy to use, and much better than implementing half-hearted locking
 within scripts.
 
-The wrapper is used in production since summer 2009, and proved to work reliably since then. In testing, it had showed to be free of race conditions when used concurrently while the author tried very hard to break it. I guess there is always some remaining corner for a race, and wouldn't claim a "100%", but it's definitely good enough and fit for the purpose.
+The wrapper is used in production since summer 2009, and proved to work
+reliably since then. In testing, it had showed to be free of race conditions
+when used concurrently while the author tried very hard to break it. I guess
+there is always some remaining corner for a race, and wouldn't claim a "100%",
+but it's definitely good enough and fit for the purpose.
 
 
 ## Features
 
-  * locks that never need a cleanup, whatever happens
-  * can wait a defined time for a lock to become "free"
-  * disallows lock files in unsafe locations (to prevent symlink attacks)
-  * easily installed, as portable as Python
+* locks that never need a cleanup, whatever happens
+* can wait a defined time for a lock to become "free"
+* disallows lock files in unsafe locations (to prevent symlink attacks)
+* easily installed, as portable as Python
 
 
 ## Supported Platforms
 
 withlock has been tested on the following platforms:
 
-  * *Debian* Lenny (5.0) and later
-  * *Ubuntu* Jaunty Jackalope (9.04), Karmic Koala (9.10) and later
-  * *openSUSE* 10.1, 11.0, 11.1 and later
-  * *CentOS* 5.4
-  * *FreeBSD* 8.0
-  * *OSX* Leopard (10.5), Snow Leopard (10.6)
-  * *OpenCSW Solaris* http://www.opencsw.org/packages/withlock/
+* **Debian** Lenny (5.0) and later
+* **Ubuntu** Jaunty Jackalope (9.04), Karmic Koala (9.10) and later
+* **openSUSE** 10.1, 11.0, 11.1 and later
+* **CentOS** 5.4
+* **FreeBSD** 8.0
+* **OSX** Leopard (10.5), Snow Leopard (10.6)
+* **OpenCSW Solaris** http://www.opencsw.org/packages/withlock/
 
 Quite likely, more platforms are supported. Please provide feedback if you know about one.
 
@@ -40,87 +46,81 @@ The most extensive testing has been performed on openSUSE with XFS and ext3 as u
 
 ## Download
 
-See "external links on the left sidebar".
-
-## Get a tarball
-
 wget http://mirrorbrain.org/files/releases/withlock-0.3.tar.gz
 
-(Google code doesn't provide a facility for downloads anymore.)
-(The tarball contains just one file.) 
 
 ## Installation from SVN
 
-{{{
-sudo su -
-wget http://withlock.googlecode.com/svn/trunk/withlock
-chmod +x withlock
-mv withlock /usr/local/bin/
-}}}
+    sudo su -
+    wget http://withlock.googlecode.com/svn/trunk/withlock
+    chmod +x withlock
+    mv withlock /usr/local/bin/
 
 
 ## Usage
 
 Usage is simple. Instead of your command 
-{{{
-   CMD ARGS...
-}}}
+
+    CMD ARGS...
+
 you simply use
-{{{
-   withlock LOCKFILE CMD ARGS...
-}}}
+
+    withlock LOCKFILE CMD ARGS...
 
 
-*Note: the lockfile LOCKFILE must not be placed in a publicly writable directory, because that would allow a symlink attack. For that reason, withlock disallows lockfiles in such locations.*
+
+**Note: the lockfile LOCKFILE must not be placed in a publicly writable
+directory, because that would allow a symlink attack. For that reason, withlock
+disallows lockfiles in such locations.**
 
 Run `withlock --help` to see more options. Here's an overview:
-{{{
- # withlock --help
-Usage: withlock [options] LOCKFILE CMD ARGS...
 
-Options:
-  --version             show program's version number and exit
-  -h, --help            show this help message and exit
-  -w SECONDS, --wait=SECONDS
-                        wait for maximum SECONDS until the lock is acquired
-  -q, --quiet           if lock can't be acquired immediately, silently quit
-                        without error
-  -v, --verbose         print debug messages to stderr
-}}}
+     # withlock --help
+    Usage: withlock [options] LOCKFILE CMD ARGS...
+    
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -w SECONDS, --wait=SECONDS
+                            wait for maximum SECONDS until the lock is acquired
+      -q, --quiet           if lock can't be acquired immediately, silently quit
+                            without error
+      -v, --verbose         print debug messages to stderr
+
 
 
 ## cron Examples
 
 Here's an example for cron jobs run under withlock:
 
-{{{
--*/10 * * * *   root     withlock LOCK-serverstatus /usr/bin/log_server_status2
-43 5,17 * * *   mirror   withlock LOCK-rsync-edu-isos rsync -rlptoH --no-motd rsync.opensuse-education.org::download/ISOs/ /srv/mirrors/opensuse-education/ISOs -hi
-}}}
+
+    -*/10 * * * *   root     withlock LOCK-serverstatus /usr/bin/log_server_status2
+    43 5,17 * * *   mirror   withlock LOCK-rsync-edu-isos rsync -rlptoH --no-motd rsync.opensuse-education.org::download/ISOs/ /srv/mirrors/opensuse-education/ISOs -hi
+
 
 
 ## History
 
 This wrapper was implemented because no comparable solution was found even after looking around for a long time (and suffering problems caused by missing or insufficient locking for years). The only solution that comes close is with-lock-ex.c, an implementation in C, which was written by Ian Jackson and placed in the public domain by him. with-lock-ex.c is traditionally available on Debian in a package named chiark-utils-bin. Parts of withlock's locking strategy and parts of the usage semantics were inspired from that program. This implementation was chosen to be done in Python because it's universally available, easy to adapt, and doesn't require to be compiled.
 
-Then, somebody pointed out to me that there's flock(1), a small tool written in C that does the same. Indeed, I had apparently managed to miss that tool during a decade's worth of Linux hacking (you discover something new every day, don't you?). The functionality is mainly the same indeed. 
+Then, somebody pointed out to me that there's `flock(1)`, a small tool written in C that does the same. Indeed, I had apparently managed to miss that tool during a decade's worth of Linux hacking (you discover something new every day, don't you?). The functionality is mainly the same indeed. 
 
 However, withlock has some advantages:
 
-  * withlock ist a little easier and logical to use than flock(1). The semantics are more suited for sysadmins.
-  * withlock always cleans up it's lock files. flock(1) always lets them lying around. I admit that I like the fact that with withlock I can always see by the presence of the lock files which jobs are running.
-  * flock doesn't prevent using unsafe directories
-  * withlock is easily extensible
-  * it could be used as a Python module (but that's not implemented)
-  * flock(1) doesn't exist on Solaris
+* withlock ist a little easier and logical to use than `flock(1)`. The semantics are more suited for sysadmins.
+* withlock always cleans up it's lock files. `flock(1)` always lets them lying around. I admit that I like the fact that with withlock I can always see by the presence of the lock files which jobs are running.
+* `flock(1)` doesn't prevent using unsafe directories
+* withlock is easily extensible
+* it could be used as a Python module (but that's not implemented)
+* `flock(1)` doesn't exist on Solaris
 
 
 ## Possible Features for the Future
 
-  * add --insecure option to override disallowance lockfiles in publicly writable directories
-  * functionality from withlock that's missing in flock(1) could be implemented in the latter
-  * it would be conceivable to extend the script to allow starting _n_ instances of a job. That would probably bring about a different locking strategy though.
-  * the script could (should) be packaged for the platforms, or integrated into the base system. Package maintainers, please grab it!
+* add --insecure option to override disallowance lockfiles in publicly writable directories
+* functionality from withlock that's missing in `flock(1)` could be implemented in the latter
+* it would be conceivable to extend the script to allow starting *n* instances of a job. That would probably bring about a different locking strategy though.
+* the script could (should) be packaged for the platforms, or integrated into the base system. Package maintainers, please grab it!
 
 Please provide feedback!
 Thanks!
