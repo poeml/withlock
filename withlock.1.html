@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>withlock(1) - locking wrapper script</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#SECURITY">SECURITY</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#HISTORY">HISTORY</a>
+    <a href="#BUGS">BUGS</a>
+    <a href="#AUTHOR">AUTHOR</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>withlock(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>withlock(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>withlock</code> - <span class="man-whatis">locking wrapper script</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>withlock</code> <var>lockfile</var> <var>command</var> [<var>args</var>...]<br />
+<code>withlock</code> [<code>-w &lt;seconds></code>|<code>--wait</code>=<var>seconds</var>] [<code>-q</code>|<code>--quiet</code>] [<code>-v</code>|<code>--verbose</code>] <var>lockfile</var> <var>command</var> [<var>args</var>...]<br />
+<code>withlock</code> [<code>-h</code>|<code>--help</code>]<br />
+<code>withlock</code> [<code>--version</code>]</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p><a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> is a wrapper script to make sure that some program isn't run
+more than once. It is ideal to prevent periodic jobs spawned by <span class="man-ref">cron<span class="s">(8)</span></span> from
+stacking up.</p>
+
+<p>It uses locks that are valid only while the wrapper is running, and thus will
+<em>never</em> require additional cleanup, even after a system crash or reboot. This
+makes the wrapper safe and easy to use, and better than implementing
+half-hearted locking within scripts.</p>
+
+<p>The script can wait a defined time for a lock to become "free".</p>
+
+<h2 id="SECURITY">SECURITY</h2>
+
+<p>Lockfiles, generally, MUST NOT be placed in a publicly writable directory,
+because that would allow for a symlink attack. For that reason, <a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a>
+simply disallows lockfiles in such locations.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<dl>
+<dt><code>-v</code>, <code>--verbose</code></dt><dd><p>Print debug messages to stderr.</p></dd>
+<dt><code>-q</code>, <code>--quiet</code></dt><dd><p>If lock can't be acquired immediately, silently quit without error.</p></dd>
+<dt><code>--version</code></dt><dd><p>Show program's version number and exit.</p></dd>
+<dt><code>-h</code>, <code>--help</code></dt><dd><p>Show command synopsis and exit.</p></dd>
+<dt><code>-w</code> <var>seconds</var>, <code>--wait</code>=<var>seconds</var></dt><dd><p>Wait for maximum <var>seconds</var> for the lock to be acquired.</p></dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Instead of your command</p>
+
+<pre><code>&lt;command> [&lt;args>...]
+</code></pre>
+
+<p>you simply use</p>
+
+<pre><code>withlock &lt;lockfile> &lt;command> [&lt;args>...]
+</code></pre>
+
+<p><span class="man-ref">cron<span class="s">(8)</span></span> jobs, especially long running ones, are frequently run under <a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a>.
+Here's an example:</p>
+
+<pre><code>-*/10 * * * *   root     withlock LOCK-serverstatus /usr/bin/log_server_status2
+43 5,17 * * *   mirror   withlock LOCK-rsync-edu-isos rsync -rlptoH --no-motd rsync.opensuse-education.org::download/ISOs/ /srv/mirrors/opensuse-education/ISOs -hi
+</code></pre>
+
+<h2 id="HISTORY">HISTORY</h2>
+
+<p>This wrapper was implemented because no comparable solution was found even
+after looking around for a long time (and suffering problems caused by missing
+or insufficient locking for years). The only solution that comes close is
+with-lock-ex.c, an implementation in C, which was written by Ian Jackson and
+placed in the public domain by him. with-lock-ex.c is traditionally available
+on Debian in a package named chiark-utils-bin. Parts of withlock's locking
+strategy and parts of the usage semantics were inspired from that program. This
+implementation was chosen to be done in Python because it's universally
+available, easy to adapt, and doesn't require to be compiled.</p>
+
+<p>Then, somebody pointed out to me that there's <span class="man-ref">flock<span class="s">(1)</span></span>, a small tool written in
+C that does the same. Indeed, I had apparently managed to miss that tool during
+a decade's worth of Linux hacking (you discover something new every day, don't
+you?). The functionality is mainly the same indeed.</p>
+
+<p>However, <a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> has some advantages:</p>
+
+<ul>
+<li><a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> ist a little easier and logical to use than <span class="man-ref">flock<span class="s">(1)</span></span>. The
+semantics are more suited for sysadmins.</li>
+<li><a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> always cleans up it's lock files. <span class="man-ref">flock<span class="s">(1)</span></span> always lets them lying
+around. I admit that I like the fact that with <a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> I can always see
+by the presence of the lock files which jobs are running.</li>
+<li><span class="man-ref">flock<span class="s">(1)</span></span> doesn't prevent using unsafe directories</li>
+<li><a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> is easily extensible</li>
+<li>it could be used as a Python module (not implemented so far)</li>
+<li><span class="man-ref">flock<span class="s">(1)</span></span> doesn't exist on Solaris and OSX</li>
+</ul>
+
+
+<h2 id="BUGS">BUGS</h2>
+
+<p><a class="man-ref" href="withlock.1.html">withlock<span class="s">(1)</span></a> has been tested on many platforms, including Debian, Ubuntu,
+openSUSE, CentOS, Fedora, FreeBSD, OSX, OpenCSW Solaris and is in production
+use since 2009. There don't seem to be race conditions (the author tried very
+hard to break it) but there are no guarantees.</p>
+
+<h2 id="AUTHOR">AUTHOR</h2>
+
+<p>This program was written by Peter Pöml <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#112;&#x65;&#116;&#x65;&#x72;&#64;&#x70;&#111;&#101;&#x6d;&#108;&#46;&#x64;&#x65;" data-bare-link="true">&#112;&#101;&#x74;&#x65;&#114;&#x40;&#112;&#x6f;&#x65;&#x6d;&#108;&#x2e;&#100;&#101;</a> in 2009.</p>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><span class="man-ref">flock<span class="s">(1)</span></span><br />
+<span class="man-ref">with-lock-ex<span class="s">(1)</span></span> from Debian package chiark-utils-bin</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'></li>
+    <li class='tc'>June 2015</li>
+    <li class='tr'>withlock(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

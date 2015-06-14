@@ -1,0 +1,118 @@
+withlock(1) -- locking wrapper script
+=====================================
+
+## SYNOPSIS
+
+`withlock` <lockfile> <command> [<args>...]<br>
+`withlock` [`-w <seconds>`|`--wait`=<seconds>] [`-q`|`--quiet`] [`-v`|`--verbose`] <lockfile> <command> [<args>...]<br>
+`withlock` [`-h`|`--help`]<br>
+`withlock` [`--version`]
+
+
+## DESCRIPTION
+
+withlock(1) is a wrapper script to make sure that some program isn't run
+more than once. It is ideal to prevent periodic jobs spawned by cron(8) from
+stacking up.
+
+It uses locks that are valid only while the wrapper is running, and thus will
+*never* require additional cleanup, even after a system crash or reboot. This
+makes the wrapper safe and easy to use, and better than implementing
+half-hearted locking within scripts.
+
+The script can wait a defined time for a lock to become "free".
+
+
+## SECURITY
+
+Lockfiles, generally, MUST NOT be placed in a publicly writable directory,
+because that would allow for a symlink attack. For that reason, withlock(1)
+simply disallows lockfiles in such locations.
+
+
+## OPTIONS
+
+  * `-v`, `--verbose`:
+    Print debug messages to stderr.
+  
+  * `-q`, `--quiet`:
+    If lock can't be acquired immediately, silently quit without error.
+  
+  * `--version`:
+    Show program's version number and exit.
+  
+  * `-h`, `--help`:
+    Show command synopsis and exit.
+  
+  * `-w` <seconds>, `--wait`=<seconds>:
+    Wait for maximum <seconds> for the lock to be acquired.
+
+
+## EXAMPLES
+
+Instead of your command 
+
+    <command> [<args>...]
+
+you simply use
+
+    withlock <lockfile> <command> [<args>...]
+
+cron(8) jobs, especially long running ones, are frequently run under withlock(1).
+Here's an example:
+
+
+    -*/10 * * * *   root     withlock LOCK-serverstatus /usr/bin/log_server_status2
+    43 5,17 * * *   mirror   withlock LOCK-rsync-edu-isos rsync -rlptoH --no-motd rsync.opensuse-education.org::download/ISOs/ /srv/mirrors/opensuse-education/ISOs -hi
+
+
+
+## HISTORY
+
+This wrapper was implemented because no comparable solution was found even
+after looking around for a long time (and suffering problems caused by missing
+or insufficient locking for years). The only solution that comes close is
+with-lock-ex.c, an implementation in C, which was written by Ian Jackson and
+placed in the public domain by him. with-lock-ex.c is traditionally available
+on Debian in a package named chiark-utils-bin. Parts of withlock's locking
+strategy and parts of the usage semantics were inspired from that program. This
+implementation was chosen to be done in Python because it's universally
+available, easy to adapt, and doesn't require to be compiled.
+
+Then, somebody pointed out to me that there's flock(1), a small tool written in
+C that does the same. Indeed, I had apparently managed to miss that tool during
+a decade's worth of Linux hacking (you discover something new every day, don't
+you?). The functionality is mainly the same indeed. 
+
+However, withlock(1) has some advantages:
+
+- withlock(1) ist a little easier and logical to use than flock(1). The
+  semantics are more suited for sysadmins.
+- withlock(1) always cleans up it's lock files. flock(1) always lets them lying
+  around. I admit that I like the fact that with withlock(1) I can always see
+  by the presence of the lock files which jobs are running.
+- flock(1) doesn't prevent using unsafe directories
+- withlock(1) is easily extensible
+- it could be used as a Python module (not implemented so far)
+- flock(1) doesn't exist on Solaris and OSX
+
+
+## BUGS
+
+
+withlock(1) has been tested on many platforms, including Debian, Ubuntu,
+openSUSE, CentOS, Fedora, FreeBSD, OSX, OpenCSW Solaris and is in production
+use since 2009. There don't seem to be race conditions (the author tried very
+hard to break it) but there are no guarantees.
+
+
+
+
+## AUTHOR  
+
+This program was written by Peter Pöml <peter@poeml.de> in 2009. 
+
+## SEE ALSO  
+
+flock(1)  
+with-lock-ex(1) from Debian package chiark-utils-bin
