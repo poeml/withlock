@@ -112,15 +112,20 @@ However, withlock has some advantages:
 * `flock(1)` doesn't prevent using unsafe directories
 * withlock is easily extensible
 * it could be used as a Python module (but that's not implemented)
-* `flock(1)` doesn't exist on Solaris
+* `flock(1)` doesn't exist on Solaris and OSX
 
 
 ## Possible Features for the Future
 
-* add --insecure option to override disallowance lockfiles in publicly writable directories
-* functionality from withlock that's missing in `flock(1)` could be implemented in the latter
-* it would be conceivable to extend the script to allow starting *n* instances of a job. That would probably bring about a different locking strategy though.
+* maybe add `--insecure` option to override disallowance lockfiles in publicly
+  writable directories
+* functionality from withlock(1) that's missing in flock(1) could be
+  implemented in the latter
+* it would be conceivable to extend the script to allow starting *n* instances
+  of a job. That would probably bring about a different locking strategy
+  though.
 * the script could (should) be packaged for the platforms, or integrated into the base system. Package maintainers, please grab it!
+
 
 Please provide feedback!
 Thanks!
