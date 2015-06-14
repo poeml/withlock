@@ -129,3 +129,29 @@ However, withlock has some advantages:
 
 Please provide feedback!
 Thanks!
+
+
+## Revision history
+
+
+0.4, 2015:
+
+- man page added
+- license file added
+- moved to github.com
+
+0.3, 2014:
+
+- At exit, unlink the lock file only if a lock was actually obtained.
+  When waiting for a lock (using -w option) and timing out, the file
+  was removed nevertheless. Thanks Bernhard Wiedemann for finding this
+  bug and providing such a good test case, so the fix was easy.
+
+0.2, 2010:
+
+- prevent possible symlink attacks by disallowing lockfiles in directories
+  where users other than the caller have write permissions
+
+0.1, 2009:
+
+- initial release
