@@ -16,7 +16,7 @@
 #
 #
 #
-# withlock -- http://code.google.com/p/withlock/
+# withlock -- https://github.com/poeml/withlock
 #
 #
 # A locking wrapper that make sure that a program isn't run more than once.

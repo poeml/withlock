@@ -49,10 +49,10 @@ The most extensive testing has been performed on openSUSE with XFS and ext3 as u
 wget http://mirrorbrain.org/files/releases/withlock-0.3.tar.gz
 
 
-## Installation from SVN
+## Simple install of the latest script from git master
 
     sudo su -
-    wget http://withlock.googlecode.com/svn/trunk/withlock
+    wget https://raw.githubusercontent.com/poeml/withlock/master/withlock
     chmod +x withlock
     mv withlock /usr/local/bin/
 
