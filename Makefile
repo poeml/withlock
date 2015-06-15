@@ -1,7 +1,13 @@
-PREFIX =	/usr/local
+prefix      = /usr/local
+exec_prefix = $(prefix)
+bindir      = $(exec_prefix)/bin
+mandir      = $(prefix)/share/man
+sysconfdir  = $(prefix)/etc
+datadir     = $(prefix)/share
+docdir      = $(datadir)/doc/packages
+
 BINDIR =	$(PREFIX)/bin
 MANDIR =	$(PREFIX)/share/man
-MAN1DIR =	$(MANDIR)/man1
 
 INSTALL =	install
 RONN =		ronn-1.9
@@ -14,7 +20,10 @@ $(MANPAGE): $(MANPAGE).ronn
 	$(RONN) --html $<
 
 install: $(BIN) $(MANPAGE)
-	$(INSTALL) -d $(BINDIR) $(MAN1DIR)
-	$(INSTALL) $(BIN) $(BINDIR)
-	$(INSTALL) -m 0644 $(MANPAGE) $(MANDIR)/man1
+	$(INSTALL) -d $(DESTDIR)$(bindir) 
+	$(INSTALL) $(BIN) $(DESTDIR)$(bindir)
+	$(INSTALL) -d $(DESTDIR)$(mandir)/man1
+	$(INSTALL) -m 0644 $(MANPAGE) $(DESTDIR)$(mandir)/man1
+	$(INSTALL) -d $(DESTDIR)$(docdir)/withlock
+	$(INSTALL) -m 0644 withlock.1.html README.md LICENSE-2.0.txt $(DESTDIR)$(docdir)/withlock
 
