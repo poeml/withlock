@@ -35,6 +35,9 @@
 #
 # See --help output for more options.
 
+# Modernize features for Python 2 and 3 compatibility
+from __future__ import absolute_import
+from __future__ import print_function
 
 __version__ = '0.4'
 
@@ -132,7 +135,7 @@ def main():
         sys.exit(3)
 
 
-    prev_umask = os.umask(0066)
+    prev_umask = os.umask(0o066)
 
     lock = open(lockfile, 'w')
 
@@ -143,7 +146,7 @@ def main():
             fcntl.lockf(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             got_lock = True
             break
-        except IOError, e:
+        except IOError as e:
             if e.errno in [ errno.EAGAIN, 
                             errno.EACCES, 
                             errno.EWOULDBLOCK, 
@@ -173,7 +176,7 @@ def main():
         try:
             os.stat(lockfile)
             break
-        except OSError, e: 
+        except OSError as e: 
             if e.errno == errno.ENOENT:
                 sys.exit('====== could not stat %s, which we have just locked' \
                             % lockfile)
@@ -199,8 +202,8 @@ if __name__ == '__main__':
         main()
 
     except SignalInterrupt:
-        print >>sys.stderr, 'killed!'
+        print('killed!', file=sys.stderr)
 
     except KeyboardInterrupt:
-        print >>sys.stderr, 'interrupted!'
+        print('interrupted!', file=sys.stderr)
 
