@@ -134,6 +134,12 @@ Thanks!
 ## Revision history
 
 
+0.5, 2016:
+
+- modernize for Python 2 and 3 compatibility
+  thanks to Patch by Jan Beran jberan|redhat.com
+  (2.7 or newer; 0.4 for Python 2.4+2.5 is archived in attic/)
+
 0.4, 2015:
 
 - fix lockfile cleanup (Thanks Martin Caj and Martin Vidner. Good Catch!)
