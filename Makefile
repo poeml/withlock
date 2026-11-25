@@ -25,5 +25,5 @@ install: $(BIN) $(MANPAGE)
 	$(INSTALL) -d $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 0644 $(MANPAGE) $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -d $(DESTDIR)$(docdir)/withlock
-	$(INSTALL) -m 0644 withlock.1.html README.md LICENSE-2.0.txt $(DESTDIR)$(docdir)/withlock
+	$(INSTALL) -m 0644 withlock.1.html README.md LICENSE-2.0.txt THANKS $(DESTDIR)$(docdir)/withlock
 
