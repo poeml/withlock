@@ -10,7 +10,7 @@ BINDIR =	$(PREFIX)/bin
 MANDIR =	$(PREFIX)/share/man
 
 INSTALL =	install
-RONN =		ronn-1.9
+RONN =		ronn-3.3
 
 BIN =		withlock
 MANPAGE =	withlock.1
