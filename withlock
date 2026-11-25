@@ -137,12 +137,11 @@ def main():
 
     prev_umask = os.umask(0o066)
 
-    lock = open(lockfile, 'w')
-
     global got_lock
     while 1 + 1 == 2:
 
         try:
+            lock = open(lockfile, 'w')
             fcntl.lockf(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             got_lock = True
             break
