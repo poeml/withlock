@@ -105,7 +105,11 @@ openSUSE, CentOS, Fedora, FreeBSD, OSX, OpenCSW Solaris and is in production
 use since 2009. There don't seem to be race conditions (the author tried very
 hard to break it) but there are no guarantees.
 
-
+Sub-second race: the lock file is unlinked at exit, so a withlock starting in
+that instant can create and lock a fresh file and overlap the finishing job.
+Negligible for jobs spawned minutes apart; only several jobs per second hit it
+reliably. Obvious fix: don't unlink the lock file at exit. TODO: add this as an
+option. 
 
 
 ## AUTHOR  

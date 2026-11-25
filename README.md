@@ -106,6 +106,23 @@ Here's an example for cron jobs run under withlock:
 
 
 
+## Known limitation
+
+The lock file is removed when withlock exits, and that removal happens while
+the lock is still held. In that instant, a withlock starting up can create a
+fresh file at the same path, lock it, and run alongside the job that is just
+finishing.
+
+The window is sub-second. For what withlock is for -- cron jobs that start
+minutes or hours apart -- it is far too small to matter in practice; you would
+need to be spawning several jobs per second to hit it.
+
+If that is not good enough for your workload, the obvious solution is to stop
+cleaning up: leave the empty lock file in place and let the lock die with the
+process, which is what `flock(1)` does. There is no option for this yet.
+
+
+
 ## History
 
 This wrapper was implemented because no comparable solution was found even after looking around for a long time (and suffering problems caused by missing or insufficient locking for years). The only solution that comes close is with-lock-ex.c, an implementation in C, which was written by Ian Jackson and placed in the public domain by him. with-lock-ex.c is traditionally available on Debian in a package named chiark-utils-bin. Parts of withlock's locking strategy and parts of the usage semantics were inspired from that program. This implementation was chosen to be done in Python because it's universally available, easy to adapt, and doesn't require to be compiled.
