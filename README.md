@@ -134,6 +134,17 @@ Thanks!
 ## Revision history
 
 
+0.6, 2026:
+
+- use python 3, but stay portable with the path to it
+- Re-open lock file before locking,
+  because the previous 'withlock' cleanup function might have deleted
+  the file and since we still held a handle to the old deleted file,
+  we could run concurrently with a 3rd 'withlock' which creates a new file.
+  Fixes #1
+  Fixes boo#864785
+  Patch kindly provided by Bernhard M. Wiedemann <bwiedemann@suse.de>
+
 0.5, 2016:
 
 - modernize for Python 2 and 3 compatibility
