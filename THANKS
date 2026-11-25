@@ -1,0 +1,23 @@
+Ian Jackson
+    Author of with-lock-ex.c, the C program whose locking strategy and
+    usage semantics inspired withlock's design. Placed in the public
+    domain by him.
+
+Martin Caj and Martin Vidner (SUSE)
+    Noticed that the got_lock variable was not declared global, which
+    left the lock file behind after otherwise successful runs (0.4).
+
+Jan Beran (Red Hat)
+    Modernised the script for Python 2 and Python 3 compatibility
+    (release 0.5).
+
+Bernhard M. Wiedemann (SUSE)
+    Found the test case that exposed the lock file cleanup bug, where a
+    file was removed even when no lock had been obtained, and provided
+    the fix (boo#864785). Also contributed the patch that re-opens the
+    lock file before every locking attempt, which is part of the sources
+    since 0.6.
+
+rool.dev 
+    Helped me with the footwork of releasing 0.6. 
+
