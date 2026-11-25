@@ -30,12 +30,12 @@ but it's definitely good enough and fit for the purpose.
 
 withlock has been tested on the following platforms:
 
-* **Debian** Lenny (5.0) and later
-* **Ubuntu** Jaunty Jackalope (9.04), Karmic Koala (9.10) and later
-* **openSUSE** 10.1, 11.0, 11.1 and later
-* **CentOS** 5.4
-* **FreeBSD** 8.0
-* **OSX** Leopard (10.5), Snow Leopard (10.6)
+* **Debian** 5.0 and later
+* **Ubuntu** 9.04 and later
+* **openSUSE** 10.1 later
+* **CentOS** 5 and later
+* **FreeBSD** 8.0, probably also later
+* **OSX** 10.5 and later
 * **OpenCSW Solaris** http://www.opencsw.org/packages/withlock/
 
 Quite likely, more platforms are supported. Please provide feedback if you know about one.
@@ -46,7 +46,7 @@ The most extensive testing has been performed on openSUSE with XFS and ext3 as u
 
 ## Download
 
-wget http://mirrorbrain.org/files/releases/withlock-0.4.tar.gz
+wget http://mirrorbrain.org/files/releases/withlock-0.6.tar.gz
 
 
 ## Simple install of the latest script from git master
