@@ -38,11 +38,18 @@ withlock has been tested on the following platforms:
 * **OSX** 10.5 and later
 * **OpenCSW Solaris** http://www.opencsw.org/packages/withlock/
 
-Quite likely, more platforms are supported. Please provide feedback if you know about one.
+Quite likely, more platforms are supported. Please provide feedback if you know
+about one.
 
-withlock should run on every platform that has a Python interpreter of version 2.4 or newer. The requirement on Python 2.4 is for the subprocess module, which was introduced with that version.
+withlock should run on every platform that has a Python 3 interpreter.
 
-The most extensive testing has been performed on openSUSE with XFS and ext3 as underlying filesystems. On the other listed platforms, basic functionality has been verified.
+The archived version in ATTIC should run everywhere where Python version 2.4 or
+newer is available. (The requirement on Python 2.4 is for the subprocess
+module, which was introduced with that version.)
+
+The most extensive testing has been performed on openSUSE with XFS and ext3 as
+underlying filesystems. On the other listed platforms, basic functionality has
+been verified.
 
 ## Download
 
