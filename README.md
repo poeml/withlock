@@ -55,6 +55,9 @@ been verified.
 
 wget http://mirrorbrain.org/files/releases/withlock-0.6.tar.gz
 
+There is a Debian package repository. Here's instructions how to use it:
+https://software.opensuse.org/download.html?project=home%3Apoeml&package=withlock
+
 
 ## Simple install of the latest script from git master
 
